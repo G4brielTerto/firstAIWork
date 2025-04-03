@@ -3,6 +3,9 @@ import tkinter as tk
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 
+
+context = []
+
 template = """
 Answer the question below.
 
@@ -12,7 +15,6 @@ Question: {question}
 
 Answer:
 """
-
 
 model = OllamaLLM(model="llama3")
 prompt = ChatPromptTemplate.from_template(template)
@@ -29,19 +31,18 @@ entrada_user = tk.Text(janela, height=3, width=50)
 entrada_user.grid(column=0, row=1, padx=10, pady=10)
 
 
-def pegar_texto():
-    texto = entrada_user.get("1.0", tk.END)
-    texto_bot["text"] = texto
 
-    context = ""
+def pegar_texto():
+    one_context = ""
     user_input = entrada_user.get("1.0", tk.END)
-    # texto_bot["text"] = user_input
 
 
     result = chain.invoke({"context": context, "question": user_input})
     texto_bot["text"] = result
-    # print("Bot: ", result)
-    context += f"\nUser: {user_input}\n AI: {result}"
+
+    one_context += f"\nUser: {user_input}\n AI: {result}"
+    context.append(one_context)
+
 
 
 botao = Button(janela, text="executar", command= pegar_texto)
